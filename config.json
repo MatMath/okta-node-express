@@ -1,0 +1,6 @@
+{
+	"auth": {
+    "entryPoint": "https://dev-137059.okta.com/app/nadev137059_classicsamlflow_1/exk21qym6tbDhKwK9357/sso/saml",
+		"cert": ""
+  }
+}
