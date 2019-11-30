@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 var passport = require('passport'),
   SamlStrategy = require('passport-saml').Strategy,
   config = require('./config.json');
@@ -29,13 +32,16 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+const privatePem =  fs.readFileSync(path.resolve(__dirname, './config/my-certificate.pem'), 'utf-8');
+const cert =  fs.readFileSync(path.resolve(__dirname, './config/okta.cert'), 'utf-8');
+console.log('privateCert', privatePem);
 passport.use(new SamlStrategy(
   {
     issuer: "http://www.okta.com/exk21qym6tbDhKwK9357",
   	path: '/login/callback',
     entryPoint: config.auth.entryPoint,
-    cert: `-----BEGIN CERTIFICATE-----
-    MIIDpDCCAoygAwIBAgIGAW6VH/yMMA0GCSqGSIb3DQEBCwUAMIGSMQswCQYDVQQGEwJVUzETMBEG
+    // privatePem,
+    cert: `MIIDpDCCAoygAwIBAgIGAW6VH/yMMA0GCSqGSIb3DQEBCwUAMIGSMQswCQYDVQQGEwJVUzETMBEG
     A1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0YTEU
     MBIGA1UECwwLU1NPUHJvdmlkZXIxEzARBgNVBAMMCmRldi0xMzcwNTkxHDAaBgkqhkiG9w0BCQEW
     DWluZm9Ab2t0YS5jb20wHhcNMTkxMTIyMjE1NzUxWhcNMjkxMTIyMjE1ODUxWjCBkjELMAkGA1UE
@@ -51,8 +57,7 @@ passport.use(new SamlStrategy(
     onjYg9WUN/+mTJ71Os61oNjbW6dBHpTV7e0sePyepoXe00wGk5rK9TfNCWZDPZVBdPOF8rMikhyz
     pUsa+jPOROiDc3pbiip0AnD3Rln0/9l4WFjosbS0ijz54Z9Ss64voINT//el9QeMlUtEtv6IIevP
     TYY0loshOzWR92NU4p69xp3RCqIHTHngStQSjTqVKXsPVEJResNtpe/9R7OXkx8YN7FWz9wjRWyZ
-    pJddGdlC2WNf0qUjRn2pFUkcJhgsb2xq
-    -----END CERTIFICATE-----`
+    pJddGdlC2WNf0qUjRn2pFUkcJhgsb2xq`,
   },
   function(profile, done) {
     if (!profile.email) {
