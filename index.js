@@ -15,7 +15,8 @@ app.configure(function() {
 });
 
 app.get('/', auth.protected, function (req, res){
-	  res.end("Hello " + req.session.passport.user);
+    res.json(req.session);
+	  // res.end("Hello " + req.session.passport.user);
 });
 
 app.get('/hello', auth.protected, function (req, res){
